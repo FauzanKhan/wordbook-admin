@@ -18,7 +18,7 @@ const api = (method, endPoint, options) => {
       Accept: 'application/json',
     };
   }
-  return fetch(`${apiBase}${endPoint}}`, defaultOptions)
+  return fetch(`${apiBase}${endPoint}`, defaultOptions)
     .catch(() => Promise.reject({ code: 'FETCH_NETWORK_ERROR' }))
     .then((res) => {
       const { ok, status, statusMessage } = res;

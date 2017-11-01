@@ -3,11 +3,18 @@ import React, { Component } from 'react';
 class CategoryForm extends Component {
   constructor(props) {
     super();
+    console.log(props);
     this.state = {
       name: '',
       icon: '',
       ...props.selectedCategory,
     }
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.onSubmit(this.state);
   }
 
   updateStateValue(key, value) {
