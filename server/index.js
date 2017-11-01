@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(`${clientDir}/index.html`));
 });
 
-app.post('/categories', (req, res) => {
+app.post('/api/categories', (req, res) => {
   console.log(req.body);
   db.collection('categories').save(req.body, (err, result) => {
     console.log('saved to database');
@@ -31,13 +31,10 @@ app.post('/categories', (req, res) => {
   });
 });
 
-app.get('/categories/new', (req, res) => {
-  res.sendFile(`${__dirname}/views/categories/new.html`);
-});
 
-app.get('/categories/list', (req, res) => {
+app.get('/api/categories', (req, res) => {
   db.collection('categories').find().toArray(function(err, results) {
     console.log(results)
-    res.render(`${__dirname}/views/categories/list.ejs`, {categories: results});
+    res.send(results);
   });
 });

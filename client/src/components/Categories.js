@@ -4,6 +4,8 @@ import Table from './Table';
 import Section from './Section';
 import CategoryForm from './CategoryForm';
 
+// import api from '../services/api';
+
 class Categories extends Component {
   constructor(props) {
     console.log(props);
@@ -17,6 +19,15 @@ class Categories extends Component {
     this.create = this.create.bind(this);
     this.hideForm = this.hideForm.bind(this);
   }
+
+  // componentWillMount() {
+  //   this.getCategories();
+  // }
+
+  // getCategories() {
+  //   api.get('categories')
+  //     .then(res => console.log('received categories', res));
+  // }
 
   create() {
     this.setState({

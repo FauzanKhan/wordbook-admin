@@ -1,5 +1,6 @@
 const path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -27,5 +28,8 @@ module.exports = {
       fileName: 'index.html',
       template: path.resolve(`${__dirname}/src/index.html`),
     }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: 'app.bundle.js.map',
+    })
   ]
 }
