@@ -10,10 +10,10 @@ class Words extends Component {
       isFormVisible: false,
       words: [{ id: 1, name: 1, icon: 1 }]
     };
-    this.getWordRow = this.getWordRow.bind(this);
+    this.getRow = this.getRow.bind(this);
   }
 
-  getWordRow({ id, name, icon }) {
+  getRow({ id, name, icon }) {
     return (
       <tr key={id}>
         <td>{id}</td>

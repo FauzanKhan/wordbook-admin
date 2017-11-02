@@ -8,7 +8,6 @@ import api from '../services/api';
 
 class Categories extends Component {
   constructor(props) {
-    console.log(props);
     super();
     this.state = {
       isFormVisible: false,
@@ -87,19 +86,17 @@ class Categories extends Component {
     const handleSubmit = selected ? this.update : this.create;
     return (
       <Section heading="Categories" shouldRenderHeader={!isFormVisible} onCreateNew={() => this.showForm()}>
-        { !isFormVisible &&
-            <Table
-              colHeadings={['Name', 'Icon', '', '']}
-              items={categories}
-              renderRow={this.getRow}
-            />
-        }
-        { isFormVisible &&
-            <CategoryForm
-              onCancel={this.hideForm}
-              onSubmit={handleSubmit}
-              selectedCategory={selected}
-            />
+        { isFormVisible
+            ? <CategoryForm
+                onCancel={this.hideForm}
+                onSubmit={handleSubmit}
+                selectedCategory={selected}
+              />
+            : <Table
+                colHeadings={['Name', 'Icon', '', '']}
+                items={categories}
+                renderRow={this.getRow}
+              />
         }
       </Section>
     );
