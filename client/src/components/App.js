@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-
 import { Route, Redirect, BrowserRouter as Router } from 'react-router-dom';
 
 import Header from './Header';
+import WelcomeScreen from './WelcomeScreen';
 import Categories from './Categories';
 import Words from './Words';
 import api from '../services/api';
@@ -52,7 +52,7 @@ class App extends Component {
         <div className="container">
           <Header />
           <br/>
-          <Redirect Path="*" to="/categories" />
+          <Route exact path="/" component={WelcomeScreen} />
           <Route path="/categories" render={CategoryList} />
           <Route path="/words" render={WordList} />
         </div>
