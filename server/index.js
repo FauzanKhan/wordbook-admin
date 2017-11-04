@@ -4,12 +4,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-const { DB_USER, DB_PASSWORD, DB_NAME } = process.env;
-//DB_NAME = vocab-learn;
-
+const { DB_URL } = process.env;
 const clientDir = `${__dirname}/../client/dist`;
 let db;
-MongoClient.connect(`mongodb://FauzanKhan:D3vFauzan!234@ds157964.mlab.com:57964/vocab-learn`, (err, database) => {
+
+console.log(`Connecting to ${DB_URL}`);
+MongoClient.connect(DB_URL, (err, database) => {
   if (err) return console.log(err)
   db = database;
 });
@@ -19,13 +19,10 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`listening on 3000 ${PORT}`);
+  console.log(`listening on ${PORT}`);
 });
 
-app.get('/', (req, res) => {
-  res.redirect('/categories');
-});
-
+/* Categories Resource */
 app.get('/api/categories', (req, res) => {
   db.collection('categories').find().toArray(function(err, categories) {
     res.send(categories);
@@ -56,6 +53,7 @@ app.delete('/api/categories/:_id', (req, res) => {
   })
 });
 
+/* Words Resource */
 app.get('/api/words', (req, res) => {
   db.collection('words').aggregate([
     {
@@ -98,6 +96,9 @@ app.delete('/api/words/:_id', (req, res) => {
   })
 });
 
+
+/* Serve Client on every URI except for the ones defined above */
 app.get('*', (req, res) => {
+  console.log('Im herer');
   res.sendFile(path.resolve(`${clientDir}/index.html`));
 });

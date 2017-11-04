@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Redirect, BrowserRouter as Router } from 'react-router-dom';
 
 import Header from './Header';
 import Categories from './Categories';
@@ -52,6 +52,7 @@ class App extends Component {
         <div className="container">
           <Header />
           <br/>
+          <Redirect Path="*" to="/categories" />
           <Route path="/categories" render={CategoryList} />
           <Route path="/words" render={WordList} />
         </div>
