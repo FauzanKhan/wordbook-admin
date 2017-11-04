@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import InputFormGroup from './InputFormGroup';
+import SelectFormGroup from './SelectFromGroup';
 class WordForm extends Component {
   constructor(props) {
     super();
@@ -35,61 +37,54 @@ class WordForm extends Component {
 
   render() {
     const { selectedWord, categories, heading } = this.props;
+    const { name, categoryId, definition, synonyms, imageUrl, audio } = this.state;
 
     return (
       <div>
         <h4>{heading}</h4>
         <form onSubmit={this.handleSubmit}>
           <div className="row">
-            <div className="column column-50">
-              <label>Name</label>
-              <input type="text"
-                value={this.state.name}
-                onChange={({target: {value}}) => this.updateStateValue('name', value)}
-              />
-            </div>
+            <InputFormGroup
+              className="column column-50"
+              label="Word"
+              value={name}
+              onChange={(value) => this.updateStateValue('name', value)}
+            />
             { categories &&
-              <div className="column column-50">
-                <label>Category</label>
-                <select type="text"
-                  value={this.state.categoryId}
-                  onChange={({target: {value}}) => this.updateStateValue('categoryId', value)}
-                >
-                  <option defaultChecked hidden>Select</option>
-                  {
-                    categories.map(c => (
-                      <option key={c._id} value={c._id}>{c.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
+                <SelectFormGroup
+                  className="column column-50"
+                  label="Category"
+                  value={categoryId}
+                  options={categories}
+                  onChange={(value) => this.updateStateValue('categoryId', value)}
+                />
             }
           </div>
+
           <div className="row">
-            <div className="column column-50">
-              <label>Definition</label>
-              <input type="text"
-                value={this.state.definition}
-                onChange={({target: {value}}) => this.updateStateValue('definition', value)}
-              />
-            </div>
-            <div className="column column-50">
-              <label>Synonymns</label>
-              <input type="text"
-                value={this.state.synonyms}
-                onChange={({target: {value}}) => this.updateStateValue('synonyms', value)}
-              />
-            </div>
+            <InputFormGroup
+              className="column column-50"
+              label="Definition"
+              value={definition}
+              onChange={(value) => this.updateStateValue('definition', value)}
+            />
+            <InputFormGroup
+              className="column column-50"
+              label="Synonymns"
+              value={synonyms}
+              onChange={(value) => this.updateStateValue('synonyms', value)}
+            />
           </div>
+
           <div className="row">
-            <div className="column column-50">
-              <label>ImageUrl</label>
-              <input type="text"
-                value={this.state.imageUrl}
-                onChange={({target: {value}}) => this.updateStateValue('imageUrl', value)}
-              />
-            </div>
+            <InputFormGroup
+              className="column column-50"
+              label="ImageUrl"
+              value={imageUrl}
+              onChange={(value) => this.updateStateValue('imageUrl', value)}
+            />
           </div>
+
           <div className="float-right">
             <button className="button button-clear">Cancel</button>
             <button type="submit" className="button">Submit</button>
