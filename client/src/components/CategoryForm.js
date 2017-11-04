@@ -9,7 +9,7 @@ class CategoryForm extends Component {
       icon: '',
       ...props.selectedCategory,
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = ::this.handleSubmit;
   }
 
   handleSubmit(e) {
@@ -25,10 +25,6 @@ class CategoryForm extends Component {
 
   render() {
     const { heading, selectedCategory } = this.props;
-    // { selectedCategory ?
-    //   `Edit Category: ${selectedCategory.name}`
-    //   : 'Create New Category'
-    // }
     return (
       <div>
         <h4>{heading}</h4>

@@ -11,7 +11,7 @@ class WordForm extends Component {
       audio: null,
       ...props.selectedWord,
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = ::this.handleSubmit;
   }
 
   handleSubmit(e) {

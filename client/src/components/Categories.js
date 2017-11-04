@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Table from './Table';
 import Section from './Section';
@@ -15,18 +16,48 @@ class Categories extends Component {
       categories: [],
     }
 
-    this.getTableRow = this.getTableRow.bind(this);
-    this.getListView = this.getListView.bind(this);
-    this.getCreateForm = this.getCreateForm.bind(this);
-    this.getEditForm = this.getEditForm.bind(this);
-    this.selectCategory = this.selectCategory.bind(this);
-    this.create = this.create.bind(this);
-    this.update = this.update.bind(this);
-    this.delete = this.delete.bind(this);
+    this.handleSave = ::this.handleSave;
+    this.create = ::this.create;
+    this.update = ::this.update;
+    this.delete = ::this.delete;
+
+    this.getTableRow = ::this.getTableRow;
+    this.getListView = ::this.getListView;
+    this.getCreateForm = ::this.getCreateForm;
+    this.getEditForm = ::this.getEditForm;
+    this.selectCategory = ::this.selectCategory;
   }
 
   componentWillMount() {
     this.props.getCategories();
+  }
+
+  selectCategory(category) {
+    this.setState({
+      selectedCategory: category,
+    });
+  }
+
+  handleSave() {
+    return this.props.getCategories()
+      .then(() => this.context.router.history.push('/categories'));
+  }
+
+  create(category) {
+    api.post('categories', { body: category })
+      .then(this.hideForm)
+      .then(this.handleSave)
+  }
+
+  update({ _id, name, icon }) {
+    api.put(`categories/${_id}`, { body: { name, icon }})
+      .then(this.hideForm)
+      .then(this.handleSave)
+  }
+
+  delete({ _id }) {
+    api.delete(`categories/${_id}`)
+      .then(this.props.getCategories);
   }
 
   getTableRow(category) {
@@ -37,7 +68,7 @@ class Categories extends Component {
         <td>{name}</td>
         <td>{icon}</td>
         <td>
-          <Link to={`${match.url}/${_id}`}>Edit</Link>
+          <Link to={`${match.url}/edit/${_id}`}>Edit</Link>
         </td>
         <td>
           <a style={{cursor: 'pointer'}} onClick={() => this.delete(category)}>Delete</a>
@@ -68,33 +99,15 @@ class Categories extends Component {
   }
 
   getEditForm({ match }) {
-    debugger;
+    const { categoryId } = match.params;
+    const selectedCategory = this.props.categories.find(({ _id }) => _id === categoryId );
     return (
-      <CategoryForm heading="Edit Category" onSubmit={this.update} />
+      <CategoryForm
+        heading={`Edit ${selectedCategory.name} Category`}
+        selectedCategory={selectedCategory}
+        onSubmit={this.update}
+      />
     )
-  }
-
-  selectCategory(category) {
-    this.setState({
-      selectedCategory: category,
-    });
-  }
-
-  create(category) {
-    api.post('categories', { body: category })
-      .then(this.hideForm)
-      .then(this.props.getCategories)
-  }
-
-  update({ _id, name, icon }) {
-    api.put(`categories/${_id}`, { body: { name, icon }})
-      .then(this.hideForm)
-      .then(this.props.getCategories)
-  }
-
-  delete({ _id }) {
-    api.delete(`categories/${_id}`)
-      .then(this.props.getCategories);
   }
 
   render() {
@@ -105,10 +118,14 @@ class Categories extends Component {
       <div>
         <Route path={`${match.url}/`} exact render={this.getListView} />
         <Route path={`${match.url}/new`} render={this.getCreateForm} />
-        <Route path={`${match.url}/edit/:category_id`} render={() => (<div>asdsa</div>)} />
+        { categories && <Route path={`${match.url}/edit/:categoryId`} render={this.getEditForm} /> }
       </div>
     );
   }
+}
+
+Categories.contextTypes = {
+  router: PropTypes.object,
 }
 
 export default Categories;

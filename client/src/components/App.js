@@ -11,17 +11,17 @@ class App extends Component {
   constructor() {
     super();
     this.state = {};
-    this.getCategories = this.getCategories.bind(this);
-    this.getWords = this.getWords.bind(this);
+    this.getCategories = ::this.getCategories;
+    this.getWords = ::this.getWords;
   }
 
   getCategories() {
-    api.get('categories')
+    return api.get('categories')
       .then(categories => this.setState({ categories }));
   }
 
   getWords() {
-    api.get('words')
+    return api.get('words')
       .then(words => this.setState({words}));
   }
 
