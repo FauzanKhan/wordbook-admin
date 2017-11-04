@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "build": "webpack --config client/webpack.config.js",
+    "build": "webpack --config client/webpack.config.js -p",
     "start": "npm run build && node server/index.js",
     "start:dev": "nodemon server/index.js"
   },
