@@ -17,12 +17,13 @@ MongoClient.connect(`mongodb://FauzanKhan:D3vFauzan!234@ds157964.mlab.com:57964/
 app.use(express.static(path.resolve(clientDir)));
 app.use(bodyParser.json());
 
-app.listen(3000, () => {
-  console.log('listening on 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`listening on 3000 ${PORT}`);
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(`${clientDir}/index.html`));
+  res.redirect('/categories');
 });
 
 app.get('/api/categories', (req, res) => {
