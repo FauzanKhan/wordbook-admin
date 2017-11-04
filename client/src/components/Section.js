@@ -5,7 +5,7 @@ const Section = ({ resource, children }) => (
   <section>
     <header>
       <h4 style={{ display: 'inline' }}>{resource}</h4>
-      <Link to={`/${resource}/new`} className="button button-outline float-right">Create New</Link>
+      <Link to={`/${resource}/new`} className="button button-outline float-right">Add new {resource}</Link>
     </header>
     {children}
   </section>

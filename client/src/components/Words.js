@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Route, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Table from './Table';
 import Section from './Section';
@@ -9,90 +11,138 @@ import api from '../services/api';
 class Words extends Component {
   constructor() {
     super();
-    this.state = {
-      isFormVisible: false,
-      selectedWord: null,
-      words: [],
-    }
+    this.state = {}
 
-    this.getWords = this.getWords.bind(this);
-    this.getRow = this.getRow.bind(this);
-    this.showForm = this.showForm.bind(this);
-    this.hideForm = this.hideForm.bind(this);
-    this.create = this.create.bind(this);
-    this.update = this.update.bind(this);
-    this.delete = this.delete.bind(this);
+    this.handleSave = ::this.handleSave;
+    this.create = ::this.create;
+    this.update = ::this.update;
+    this.delete = ::this.delete;
+
+    this.getTableRow = ::this.getTableRow;
+    this.getListView = ::this.getListView;
+    this.getCreateForm = ::this.getCreateForm;
+    this.getEditForm = ::this.getEditForm;
+    this.selectWord = ::this.selectWord;
   }
 
-  getRow({ name, definition, synonmymns, imageUrl, audio }) {
-    return (
-      <tr key={id}>
-        <td>{name}</td>
-        <td>{definition}</td>
-        <td>{synonmymns}</td>
-        <td><img src={imageUrl} /></td>
-        <td>Edit</td>
-        <td>Delete</td>
-      </tr>
-    );
+  componentWillMount() {
+    this.props.getWords();
+    this.props.getCategories();
   }
 
-  getWords() {
-    api.get('words')
-      .then(words => this.setState({ words }));
-  }
-
-  showForm(word) {
+  selectWord(word) {
     this.setState({
-      isFormVisible: true,
       selectedWord: word,
     });
   }
 
-  hideForm() {
-    return this.setState({
-      selectedWord: null,
-      isFormVisible: false,
-    });
+  handleSave() {
+    return this.props.getWords()
+      .then(() => this.context.router.history.push('/words'));
   }
 
   create(word) {
     api.post('words', { body: word })
-      .then(this.hideForm)
-      .then(this.getWords)
+      .then(this.handleSave)
   }
 
-  update({ _id, name, icon }) {
-    api.put(`words/${_id}`, { body: { name, icon }})
-      .then(this.hideForm)
-      .then(this.getWords)
+  update(word) {
+    const { _id } = word;
+    api.put(`words/${_id}`, { body: { ...word } })
+      .then(this.handleSave)
   }
 
   delete({ _id }) {
     api.delete(`words/${_id}`)
-      .then(this.getWords);
+      .then(this.props.getWords);
   }
 
-  render() {
-    const { words, isFormVisible, selectedWord } = this.state;
-    const handleSubmit = selectedWord ? this.update : this.create;
+  getTableRow(word) {
+    debugger;
+    const { _id, name, definition, synonyms, imageUrl, audio, category } = word;
+    const { match } = this.props;
+    const categoryName = category[0] && category[0].name;
+
     return (
-      <Section heading="Words" shouldRenderHeader={!isFormVisible} onCreateNew={() => this.showForm()}>
-        { isFormVisible
-          ? <WordForm
-              onCancel={this.hideForm}
-              onSubmit={handleSubmit}
-              selectedWord={selectedWord}
-            />
-          : <Table
-              colHeadings={["Audio", "Name", "definition", "Synonymns", "Image"]}
-              items={words}
-              renderRow={this.getRow}
-            />
+      <tr key={_id}>
+        <td>Audio</td>
+        <td>{name}</td>
+        <td>{categoryName}</td>
+        <td>{definition}</td>
+        <td>{synonyms}</td>
+        <td><img height="50px" width="50px" style={{'object-fit': 'cover'}} src={imageUrl} /></td>
+        <td>
+          <Link to={`${match.url}/edit/${_id}`}>Edit</Link>
+        </td>
+        <td>
+          <a style={{cursor: 'pointer'}} onClick={() => this.delete(word)}>Delete</a>
+        </td>
+      </tr>
+    );
+  }
+
+  getListView() {
+    const { words } = this.props;
+
+    return (
+      <Section resource="words">
+        { words && words.length
+            ? <Table
+                colHeadings={['Audio', 'Name', 'Category', 'definition', 'Synonyms', 'Image']}
+                items={words}
+                renderRow={this.getTableRow}
+              />
+            : <h2>You haven't added any words yet</h2>
         }
       </Section>
     );
   }
+
+  getCreateForm() {
+    const { categories, getCategories } = this.props;
+
+    return (
+      <WordForm
+        heading="Add New Word"
+        getCategories={getCategories}
+        categories={categories}
+        onSubmit={this.create}
+      />
+    )
+  }
+
+  getEditForm({ match }) {
+    const { wordId } = match.params;
+    const { categories, words, getCategories } = this.props;
+    const selectedWord = words.find(({ _id }) => _id === wordId );
+
+    return (
+      <WordForm
+        heading={`Edit ${selectedWord.name} Word`}
+        getCategories={getCategories}
+        categories={categories}
+        selectedWord={selectedWord}
+        onSubmit={this.update}
+      />
+    )
+  }
+
+  render() {
+    const { selectedWord } = this.state;
+    const { words, match } = this.props;
+
+    return (
+      <div>
+        <Route path={`${match.url}/`} exact render={this.getListView} />
+        <Route path={`${match.url}/new`} render={this.getCreateForm} />
+        { words && <Route path={`${match.url}/edit/:wordId`} render={this.getEditForm} /> }
+      </div>
+    );
+  }
+}
+
+Words.contextTypes = {
+  router: PropTypes.object,
 }
 
 export default Words;

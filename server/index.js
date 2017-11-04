@@ -52,7 +52,49 @@ app.delete('/api/categories/:_id', (req, res) => {
   })
 });
 
+app.get('/api/words', (req, res) => {
+  db.collection('words').aggregate([
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'categoryId',
+        foreignField: '_id',
+        as: 'category',
+      },
+    }
+  ], (err, result) => {
+    res.send(result);
+  })
+});
+
+app.post('/api/words', (req, res) => {
+  console.log('words', req.body);
+  const words = Object.assign({}, req.body);
+  words.categoryId = new ObjectId(req.body.categoryId);
+  db.collection('words').save(words, (err, result) => {
+    console.log('record added');
+    res.status(202).send();
+  });
+});
+
+app.put('/api/words/:_id', (req, res) => {
+  const { name, definition, synonyms, imageUrl, audio, categoryId } = req.body;
+  console.log()
+  const _id = new ObjectId(req.params._id);
+  db.collection('words').update({ _id }, { name, definition, synonyms, imageUrl, audio, categoryId }, (err, result) => {
+    console.log('record updated');
+    res.status(202).send();
+  });
+});
+
+app.delete('/api/words/:_id', (req, res) => {
+  const _id = new ObjectId(req.params._id);
+  db.collection('words').remove({ _id }, { single: true }, (err, result) => {
+    console.log('record deleted', err);
+    res.status(202).send();
+  })
+});
+
 app.get('*', (req, res) => {
-  console.log('im here', req.url);
   res.sendFile(path.resolve(`${clientDir}/index.html`));
 });

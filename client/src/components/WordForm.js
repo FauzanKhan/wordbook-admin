@@ -6,12 +6,20 @@ class WordForm extends Component {
     this.state = {
       name: '',
       definition: '',
-      synonymns: '',
+      synonyms: '',
       imageUrl: '',
       audio: null,
+      categoryId: '',
       ...props.selectedWord,
-    }
+    };
+    console.log(this.state);
+
     this.handleSubmit = ::this.handleSubmit;
+  }
+
+  componentWillMount() {
+    const { categories, getCategories } = this.props;
+    !categories && getCategories();
   }
 
   handleSubmit(e) {
@@ -26,15 +34,11 @@ class WordForm extends Component {
   }
 
   render() {
-    const { onCancel, selectedWord } = this.props;
+    const { selectedWord, categories, heading } = this.props;
+
     return (
       <div>
-        <h4>
-          { selectedWord ?
-              `Edit Word: ${selectedCategory.name}`
-              : 'Create New Word'
-          }
-        </h4>
+        <h4>{heading}</h4>
         <form onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="column column-50">
@@ -44,15 +48,22 @@ class WordForm extends Component {
                 onChange={({target: {value}}) => this.updateStateValue('name', value)}
               />
             </div>
-            <div className="column column-50">
-              <label>Category</label>
-              <select type="text"
-                value={this.state.category}
-                onChange={({target: {value}}) => this.updateStateValue('category', value)}
-              >
-                <option>asd</option>
-              </select>
-            </div>
+            { categories &&
+              <div className="column column-50">
+                <label>Category</label>
+                <select type="text"
+                  value={this.state.categoryId}
+                  onChange={({target: {value}}) => this.updateStateValue('categoryId', value)}
+                >
+                  <option defaultChecked hidden>Select</option>
+                  {
+                    categories.map(c => (
+                      <option key={c._id} value={c._id}>{c.name}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            }
           </div>
           <div className="row">
             <div className="column column-50">
@@ -65,8 +76,8 @@ class WordForm extends Component {
             <div className="column column-50">
               <label>Synonymns</label>
               <input type="text"
-                value={this.state.synonymns}
-                onChange={({target: {value}}) => this.updateStateValue('synonymns', value)}
+                value={this.state.synonyms}
+                onChange={({target: {value}}) => this.updateStateValue('synonyms', value)}
               />
             </div>
           </div>
@@ -80,7 +91,7 @@ class WordForm extends Component {
             </div>
           </div>
           <div className="float-right">
-            <button className="button button-clear" onClick={onCancel}>Cancel</button>
+            <button className="button button-clear">Cancel</button>
             <button type="submit" className="button">Submit</button>
           </div>
         </form>

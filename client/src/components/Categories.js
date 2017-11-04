@@ -11,11 +11,9 @@ import api from '../services/api';
 class Categories extends Component {
   constructor(props) {
     super();
-    this.state = {
-      selectedCategory: null,
-      categories: [],
-    }
+    this.state = {};
 
+    this.selectCategory = ::this.selectCategory;
     this.handleSave = ::this.handleSave;
     this.create = ::this.create;
     this.update = ::this.update;
@@ -25,7 +23,6 @@ class Categories extends Component {
     this.getListView = ::this.getListView;
     this.getCreateForm = ::this.getCreateForm;
     this.getEditForm = ::this.getEditForm;
-    this.selectCategory = ::this.selectCategory;
   }
 
   componentWillMount() {
@@ -45,13 +42,11 @@ class Categories extends Component {
 
   create(category) {
     api.post('categories', { body: category })
-      .then(this.hideForm)
       .then(this.handleSave)
   }
 
   update({ _id, name, icon }) {
     api.put(`categories/${_id}`, { body: { name, icon }})
-      .then(this.hideForm)
       .then(this.handleSave)
   }
 
@@ -63,6 +58,7 @@ class Categories extends Component {
   getTableRow(category) {
     const { _id, name, icon } = category;
     const { match } = this.props;
+
     return (
       <tr key={_id}>
         <td>{name}</td>
@@ -79,6 +75,7 @@ class Categories extends Component {
 
   getListView() {
     const { categories } = this.props;
+
     return (
       <Section resource="categories">
         { categories &&
@@ -94,13 +91,14 @@ class Categories extends Component {
 
   getCreateForm() {
     return (
-      <CategoryForm heading="Create New Category" onSubmit={this.create} />
+      <CategoryForm heading="Add New Category" onSubmit={this.create} />
     )
   }
 
   getEditForm({ match }) {
     const { categoryId } = match.params;
     const selectedCategory = this.props.categories.find(({ _id }) => _id === categoryId );
+
     return (
       <CategoryForm
         heading={`Edit ${selectedCategory.name} Category`}

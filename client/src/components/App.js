@@ -11,6 +11,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {};
+
     this.getCategories = ::this.getCategories;
     this.getWords = ::this.getWords;
   }
@@ -28,8 +29,23 @@ class App extends Component {
   render() {
     const { categories, words } = this.state;
 
-    const CategoryList = ({ match }) => (<Categories categories={categories} getCategories={this.getCategories} match={match} />);
-    const WordList =  ({ match }) => (<Words words={words} getWords={this.getWords} match={match} />);
+    const CategoryList = ({ match }) => (
+      <Categories
+        categories={categories}
+        getCategories={this.getCategories}
+        match={match}
+      />
+    );
+
+    const WordList =  ({ match }) => (
+      <Words
+        words={words}
+        categories={categories}
+        getWords={this.getWords}
+        getCategories={this.getCategories}
+        match={match}
+      />
+    );
 
     return (
       <Router>
