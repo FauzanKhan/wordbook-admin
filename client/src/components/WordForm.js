@@ -24,18 +24,6 @@ class WordForm extends Component {
     !categories && getCategories();
   }
 
-  // uploadAudioFile() {
-  //   const { file } = this.state;
-  //   const reader = new FileReader();
-  //   reader.onload = (upload) => {
-  //     console.log('yayayya', upload);
-  //     this.setState({
-  //       audio: ,
-  //     });
-  //   }
-  //   reader.readAsDataURL(file);
-  // }
-
   handleFileChange(value, files) {
     const reader = new FileReader();
     const file = files[0];
