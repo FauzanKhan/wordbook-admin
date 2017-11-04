@@ -10,12 +10,12 @@ class WordForm extends Component {
       definition: '',
       synonyms: '',
       imageUrl: '',
-      audio: null,
+      audioFileName: '',
       categoryId: '',
       ...props.selectedWord,
     };
-    console.log(this.state);
 
+    this.handleFileChange = ::this.handleFileChange;
     this.handleSubmit = ::this.handleSubmit;
   }
 
@@ -24,8 +24,35 @@ class WordForm extends Component {
     !categories && getCategories();
   }
 
+  // uploadAudioFile() {
+  //   const { file } = this.state;
+  //   const reader = new FileReader();
+  //   reader.onload = (upload) => {
+  //     console.log('yayayya', upload);
+  //     this.setState({
+  //       audio: ,
+  //     });
+  //   }
+  //   reader.readAsDataURL(file);
+  // }
+
+  handleFileChange(value, files) {
+    const reader = new FileReader();
+    const file = files[0];
+
+    reader.onload = (upload) => {
+      this.setState({
+        audio: upload.target.result,
+        audioFileName: file.name,
+      }, () => console.log(this.state));
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   handleSubmit(e) {
     e.preventDefault();
+    debugger;
     this.props.onSubmit(this.state);
   }
 
@@ -37,7 +64,7 @@ class WordForm extends Component {
 
   render() {
     const { selectedWord, categories, heading } = this.props;
-    const { name, categoryId, definition, synonyms, imageUrl, audio } = this.state;
+    const { name, categoryId, definition, synonyms, imageUrl } = this.state;
 
     return (
       <div>
@@ -83,6 +110,12 @@ class WordForm extends Component {
               value={imageUrl}
               onChange={(value) => this.updateStateValue('imageUrl', value)}
             />
+            {
+              <div className="column column-50">
+                <label>Audio</label>
+                <input type="file" onChange={({ target: { value, files }}) => this.handleFileChange( value, files)} />
+              </div>
+            }
           </div>
 
           <div className="float-right">

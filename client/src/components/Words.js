@@ -13,21 +13,39 @@ class Words extends Component {
     super();
     this.state = {}
 
-    this.handleSave = ::this.handleSave;
     this.create = ::this.create;
     this.update = ::this.update;
     this.delete = ::this.delete;
+    this.selectWord = ::this.selectWord;
+    this.onSaveSuccess = ::this.onSaveSuccess;
+    this.changeCurrentAudio = ::this.changeCurrentAudio;
+    this.clearCurrentAudio = ::this.clearCurrentAudio;
 
     this.getTableRow = ::this.getTableRow;
     this.getListView = ::this.getListView;
     this.getCreateForm = ::this.getCreateForm;
     this.getEditForm = ::this.getEditForm;
-    this.selectWord = ::this.selectWord;
   }
 
   componentWillMount() {
     this.props.getWords();
     this.props.getCategories();
+  }
+
+  create(word) {
+    api.post('words', { body: word })
+      .then(this.onSaveSuccess)
+  }
+
+  update(word) {
+    const { _id } = word;
+    api.put(`words/${_id}`, { body: word })
+      .then(this.onSaveSuccess)
+  }
+
+  delete({ _id }) {
+    api.delete(`words/${_id}`)
+      .then(this.props.getWords);
   }
 
   selectWord(word) {
@@ -36,35 +54,37 @@ class Words extends Component {
     });
   }
 
-  handleSave() {
+  onSaveSuccess() {
     return this.props.getWords()
       .then(() => this.context.router.history.push('/words'));
   }
 
-  create(word) {
-    api.post('words', { body: word })
-      .then(this.handleSave)
+  changeCurrentAudio(_id, audio) {
+    const { currentAudioId } = this.state;
+    this.setState({
+      currentAudioSource: currentAudioId === _id ? null : audio,
+      currentAudioId: currentAudioId === _id ? null : _id,
+    },() => console.log(this.state))
   }
 
-  update(word) {
-    const { _id } = word;
-    api.put(`words/${_id}`, { body: { ...word } })
-      .then(this.handleSave)
-  }
-
-  delete({ _id }) {
-    api.delete(`words/${_id}`)
-      .then(this.props.getWords);
+  clearCurrentAudio() {
+    this.setState({
+      currentAudioSource: null,
+      currentAudioId: null,
+    });
   }
 
   getTableRow(word) {
-    const { _id, name, definition, synonyms, imageUrl, audio, category } = word;
+    const { _id, name, definition, synonyms, imageUrl, audioFileName, audio, category } = word;
     const { match } = this.props;
     const categoryName = category[0] && category[0].name;
 
     return (
       <tr key={_id}>
-        <td>Audio</td>
+        <td>
+          <a role="button" style={{ cursor: 'pointer' }} onClick={() => this.changeCurrentAudio(_id, audio)}>&#9658;</a>
+          <span>{audioFileName}</span>
+        </td>
         <td>{name}</td>
         <td>{categoryName}</td>
         <td>{definition}</td>
@@ -85,13 +105,12 @@ class Words extends Component {
 
     return (
       <Section resource="words">
-        { words && words.length
-            ? <Table
-                colHeadings={['Audio', 'Name', 'Category', 'definition', 'Synonyms', 'Image']}
-                items={words}
-                renderRow={this.getTableRow}
-              />
-            : <h2>You haven't added any words yet</h2>
+        { words &&
+            <Table
+              colHeadings={['Audio', 'Name', 'Category', 'definition', 'Synonyms', 'Image']}
+              items={words}
+              renderRow={this.getTableRow}
+            />
         }
       </Section>
     );
@@ -127,7 +146,7 @@ class Words extends Component {
   }
 
   render() {
-    const { selectedWord } = this.state;
+    const { selectedWord, currentAudioSource } = this.state;
     const { words, match } = this.props;
 
     return (
@@ -135,6 +154,7 @@ class Words extends Component {
         <Route path={`${match.url}/`} exact render={this.getListView} />
         <Route path={`${match.url}/new`} render={this.getCreateForm} />
         { words && <Route path={`${match.url}/edit/:wordId`} render={this.getEditForm} /> }
+        { currentAudioSource && <audio src={currentAudioSource} onEnded={this.clearCurrentAudio} autoPlay />}
       </div>
     );
   }

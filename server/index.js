@@ -4,9 +4,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+const { DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+//DB_NAME = vocab-learn;
+
 const clientDir = `${__dirname}/../client/dist`;
 let db;
-MongoClient.connect('mongodb://FauzanKhan:D3vFauzan!234@ds157964.mlab.com:57964/vocab-learn', (err, database) => {
+MongoClient.connect(`mongodb://FauzanKhan:D3vFauzan!234@ds157964.mlab.com:57964/vocab-learn`, (err, database) => {
   if (err) return console.log(err)
   db = database;
 });
@@ -77,10 +80,10 @@ app.post('/api/words', (req, res) => {
 });
 
 app.put('/api/words/:_id', (req, res) => {
-  const { name, definition, synonyms, imageUrl, audio, categoryId } = req.body;
-  console.log()
+  req.body.categoryId = new ObjectId(req.body.categoryId);
+  const { name, definition, synonyms, imageUrl, audio, audioFileName, categoryId } = req.body;
   const _id = new ObjectId(req.params._id);
-  db.collection('words').update({ _id }, { name, definition, synonyms, imageUrl, audio, categoryId }, (err, result) => {
+  db.collection('words').update({ _id }, { name, definition, synonyms, imageUrl, audio, audioFileName, categoryId }, (err, result) => {
     console.log('record updated');
     res.status(202).send();
   });
