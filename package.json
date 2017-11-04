@@ -6,7 +6,11 @@
   "scripts": {
     "test": "test",
     "build": "webpack --config client/webpack.config.js",
-    "start": "nodemon server/index.js"
+    "start": "npm run build && node server/index.js",
+    "start:dev": "nodemon server/index.js"
+  },
+  "engines": {
+    "node": "8.9.0"
   },
   "author": "FauzanKhan",
   "license": "MIT",
