@@ -107,7 +107,7 @@ class Words extends Component {
       <Section resource="words">
         { words &&
             <Table
-              colHeadings={['Audio', 'Name', 'Category', 'definition', 'Synonyms', 'Image']}
+              colHeadings={['Audio', 'Name', 'Category', 'Definition', 'Synonyms', 'Image', '', '']}
               items={words}
               renderRow={this.getTableRow}
             />
