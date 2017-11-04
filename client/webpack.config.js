@@ -2,10 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const clientDir = `${__dirname}/client`;
+
 module.exports = {
-  entry: './src/index.js',
+  entry: `${__dirname}/src/index.js`,
   output: {
-    path: path.resolve(`${__dirname}/dist/`),
+    path: `${__dirname}/dist/`,
     filename: 'app.bundle.js',
     publicPath: '/',
   },
@@ -27,7 +29,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'WordBook',
       fileName: 'index.html',
-      template: path.resolve(`${__dirname}/src/index.html`),
+      template: `${__dirname}/src/index.html`,
     }),
     new webpack.SourceMapDevToolPlugin({
       filename: 'app.bundle.js.map',

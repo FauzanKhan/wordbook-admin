@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
+    "build": "webpack --config client/webpack.config.js",
     "start": "nodemon server/index.js"
   },
   "author": "FauzanKhan",
