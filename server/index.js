@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/categories', (req, res) => {
-  db.collection('categories').find().toArray(function(err, results) {
-    res.send(results);
+  db.collection('categories').find().toArray(function(err, categories) {
+    res.send(categories);
   });
 });
 
@@ -47,7 +47,7 @@ app.put('/api/categories/:_id', (req, res) => {
 app.delete('/api/categories/:_id', (req, res) => {
   const _id = new ObjectId(req.params._id);
   db.collection('categories').remove({ _id }, { single: true }, (err, result) => {
-    console.log('record deleted', err);
+    console.log('record deleted');
     res.status(202).send();
   })
 });
@@ -62,13 +62,12 @@ app.get('/api/words', (req, res) => {
         as: 'category',
       },
     }
-  ], (err, result) => {
-    res.send(result);
+  ], (err, wordsWithCategories) => {
+    res.send(wordsWithCategories);
   })
 });
 
 app.post('/api/words', (req, res) => {
-  console.log('words', req.body);
   const words = Object.assign({}, req.body);
   words.categoryId = new ObjectId(req.body.categoryId);
   db.collection('words').save(words, (err, result) => {

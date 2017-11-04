@@ -58,7 +58,6 @@ class Words extends Component {
   }
 
   getTableRow(word) {
-    debugger;
     const { _id, name, definition, synonyms, imageUrl, audio, category } = word;
     const { match } = this.props;
     const categoryName = category[0] && category[0].name;
@@ -70,7 +69,7 @@ class Words extends Component {
         <td>{categoryName}</td>
         <td>{definition}</td>
         <td>{synonyms}</td>
-        <td><img height="50px" width="50px" style={{'object-fit': 'cover'}} src={imageUrl} /></td>
+        <td><img height="50px" width="50px" style={{objectFit: 'cover'}} src={imageUrl} /></td>
         <td>
           <Link to={`${match.url}/edit/${_id}`}>Edit</Link>
         </td>
