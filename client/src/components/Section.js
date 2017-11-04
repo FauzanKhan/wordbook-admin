@@ -1,13 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Section = ({ heading, onCreateNew, shouldRenderHeader = true, children }) => (
+const Section = ({ resource, children }) => (
   <section>
-    { shouldRenderHeader &&
-        <header>
-          <h4 style={{ display: 'inline' }}>{heading}</h4>
-          <button className="button button-outline float-right" onClick={onCreateNew}>Create New</button>
-        </header>
-    }
+    <header>
+      <h4 style={{ display: 'inline' }}>{resource}</h4>
+      <Link to={`/${resource}/new`} className="button button-outline float-right">Create New</Link>
+    </header>
     {children}
   </section>
 );

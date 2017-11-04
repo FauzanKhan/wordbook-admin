@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Link } from 'react-router-dom';
 class CategoryForm extends Component {
   constructor(props) {
     super();
@@ -24,30 +24,29 @@ class CategoryForm extends Component {
   }
 
   render() {
-    const { onCancel, selectedCategory } = this.props;
+    const { heading, selectedCategory } = this.props;
+    // { selectedCategory ?
+    //   `Edit Category: ${selectedCategory.name}`
+    //   : 'Create New Category'
+    // }
     return (
       <div>
-        <h4>
-          { selectedCategory ?
-              `Edit Category: ${selectedCategory.name}`
-              : 'Create New Category'
-          }
-        </h4>
+        <h4>{heading}</h4>
         <form onSubmit={this.handleSubmit}>
           <label>Name</label>
           <input type="text"
             value={this.state.name}
-            onChange={({target: {value}}) => this.updateStateValue('name', value)}
+            onChange={({ target: { value }}) => this.updateStateValue('name', value)}
           />
 
           <label>Icon</label>
           <input type="text"
             value={this.state.icon}
-            onChange={({target: {value}}) => this.updateStateValue('icon', value)}
+            onChange={({ target: { value}}) => this.updateStateValue('icon', value)}
           />
 
           <div className="float-right">
-            <button className="button button-clear" onClick={onCancel}>Cancel</button>
+            <Link to="/categories" className="button button-clear">Cancel</Link>
             <button type="submit" className="button">Submit</button>
           </div>
         </form>

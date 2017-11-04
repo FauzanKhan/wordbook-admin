@@ -11,6 +11,7 @@ const api = (method, endPoint, options) => {
     credentials: 'same-origin',
     processData: false,
   };
+
   if (method === 'POST' || method === 'PUT') {
     defaultOptions.body = JSON.stringify(options.body || {});
     defaultOptions.headers = {
@@ -18,6 +19,7 @@ const api = (method, endPoint, options) => {
       Accept: 'application/json',
     };
   }
+
   return fetch(`${apiBase}${endPoint}`, defaultOptions)
     .catch(() => Promise.reject({ code: 'FETCH_NETWORK_ERROR' }))
     .then((res) => {
@@ -34,5 +36,4 @@ const api = (method, endPoint, options) => {
   api[method.toLowerCase()] = (endPoint, options) => api(method, endPoint, options);
 });
 
-export { api };
 export default api;

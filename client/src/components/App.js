@@ -1,21 +1,45 @@
 import React, { Component } from 'react';
 
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+
 import Header from './Header';
 import Categories from './Categories';
 import Words from './Words';
+import api from '../services/api';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {};
+    this.getCategories = this.getCategories.bind(this);
+    this.getWords = this.getWords.bind(this);
+  }
+
+  getCategories() {
+    api.get('categories')
+      .then(categories => this.setState({ categories }));
+  }
+
+  getWords() {
+    api.get('words')
+      .then(words => this.setState({words}));
+  }
+
   render() {
+    const { categories, words } = this.state;
+
+    const CategoryList = ({ match }) => (<Categories categories={categories} getCategories={this.getCategories} match={match} />);
+    const WordList =  ({ match }) => (<Words words={words} getWords={this.getWords} match={match} />);
+
     return (
-      <div className="container">
-        <Header />
-        <br/>
-        <Categories />
-        <br />
-        <hr />
-        <br />
-        <Words />
-      </div>
+      <Router>
+        <div className="container">
+          <Header />
+          <br/>
+          <Route path="/categories" render={CategoryList} />
+          <Route path="/words" render={WordList} />
+        </div>
+      </Router>
     );
   }
 }

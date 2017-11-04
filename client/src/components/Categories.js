@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route, Link } from 'react-router-dom';
 
 import Table from './Table';
 import Section from './Section';
@@ -10,44 +11,33 @@ class Categories extends Component {
   constructor(props) {
     super();
     this.state = {
-      isFormVisible: false,
-      selected: null,
+      selectedCategory: null,
       categories: [],
     }
 
-    this.getCategories = this.getCategories.bind(this);
-    this.getRow = this.getRow.bind(this);
-    this.showForm = this.showForm.bind(this);
-    this.hideForm = this.hideForm.bind(this);
+    this.getTableRow = this.getTableRow.bind(this);
+    this.getListView = this.getListView.bind(this);
+    this.getCreateForm = this.getCreateForm.bind(this);
+    this.getEditForm = this.getEditForm.bind(this);
+    this.selectCategory = this.selectCategory.bind(this);
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
   }
 
   componentWillMount() {
-    this.getCategories();
+    this.props.getCategories();
   }
 
-  getCategories() {
-    api.get('categories')
-      .then(categories => this.setState({ categories }));
-  }
-
-  showForm(category) {
-    this.setState({
-      isFormVisible: true,
-      selected: category,
-    });
-  }
-
-  getRow(category) {
-    const { id, name, icon } = category;
+  getTableRow(category) {
+    const { _id, name, icon } = category;
+    const { match } = this.props;
     return (
-      <tr key={id}>
+      <tr key={_id}>
         <td>{name}</td>
         <td>{icon}</td>
         <td>
-          <a style={{cursor: 'pointer'}} onClick={() => this.showForm(category)}>Edit</a>
+          <Link to={`${match.url}/${_id}`}>Edit</Link>
         </td>
         <td>
           <a style={{cursor: 'pointer'}} onClick={() => this.delete(category)}>Delete</a>
@@ -56,49 +46,67 @@ class Categories extends Component {
     );
   }
 
-  hideForm() {
-    return this.setState({
-      selected: null,
-      isFormVisible: false,
+  getListView() {
+    const { categories } = this.props;
+    return (
+      <Section resource="categories">
+        { categories &&
+            <Table
+              colHeadings={['Name', 'Icon', '', '']}
+              items={categories}
+              renderRow={this.getTableRow}
+            />
+        }
+      </Section>
+    );
+  }
+
+  getCreateForm() {
+    return (
+      <CategoryForm heading="Create New Category" onSubmit={this.create} />
+    )
+  }
+
+  getEditForm({ match }) {
+    debugger;
+    return (
+      <CategoryForm heading="Edit Category" onSubmit={this.update} />
+    )
+  }
+
+  selectCategory(category) {
+    this.setState({
+      selectedCategory: category,
     });
   }
 
   create(category) {
     api.post('categories', { body: category })
       .then(this.hideForm)
-      .then(this.getCategories)
+      .then(this.props.getCategories)
   }
 
   update({ _id, name, icon }) {
     api.put(`categories/${_id}`, { body: { name, icon }})
       .then(this.hideForm)
-      .then(this.getCategories)
+      .then(this.props.getCategories)
   }
 
   delete({ _id }) {
-    console.log(_id);
     api.delete(`categories/${_id}`)
-      .then(this.getCategories);
+      .then(this.props.getCategories);
   }
 
   render() {
-    const { categories, isFormVisible, selected } = this.state;
-    const handleSubmit = selected ? this.update : this.create;
+    const { selectedCategory } = this.state;
+    const { categories, match } = this.props;
+
     return (
-      <Section heading="Categories" shouldRenderHeader={!isFormVisible} onCreateNew={() => this.showForm()}>
-        { isFormVisible
-            ? <CategoryForm
-                onCancel={this.hideForm}
-                onSubmit={handleSubmit}
-                selectedCategory={selected}
-              />
-            : <Table
-                colHeadings={['Name', 'Icon', '', '']}
-                items={categories}
-                renderRow={this.getRow}
-              />
-        }
-      </Section>
+      <div>
+        <Route path={`${match.url}/`} exact render={this.getListView} />
+        <Route path={`${match.url}/new`} render={this.getCreateForm} />
+        <Route path={`${match.url}/edit/:category_id`} render={() => (<div>asdsa</div>)} />
+      </div>
     );
   }
 }

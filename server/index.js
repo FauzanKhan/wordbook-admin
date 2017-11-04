@@ -11,16 +11,21 @@ MongoClient.connect('mongodb://FauzanKhan:D3vFauzan!234@ds157964.mlab.com:57964/
   db = database;
 });
 
-app.use(bodyParser.json());
 app.use(express.static(path.resolve(clientDir)));
+app.use(bodyParser.json());
 
 app.listen(3000, () => {
   console.log('listening on 3000');
 });
 
-
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(`${clientDir}/index.html`));
+});
+
+app.get('/api/categories', (req, res) => {
+  db.collection('categories').find().toArray(function(err, results) {
+    res.send(results);
+  });
 });
 
 app.post('/api/categories', (req, res) => {
@@ -47,8 +52,7 @@ app.delete('/api/categories/:_id', (req, res) => {
   })
 });
 
-app.get('/api/categories', (req, res) => {
-  db.collection('categories').find().toArray(function(err, results) {
-    res.send(results);
-  });
+app.get('*', (req, res) => {
+  console.log('im here', req.url);
+  res.sendFile(path.resolve(`${clientDir}/index.html`));
 });
