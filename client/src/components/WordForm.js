@@ -40,7 +40,6 @@ class WordForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    debugger;
     this.props.onSubmit(this.state);
   }
 
@@ -107,7 +106,7 @@ class WordForm extends Component {
           </div>
 
           <div className="float-right">
-            <button className="button button-clear">Cancel</button>
+            <Link to="/words" className="button button-clear">Cancel</Link>
             <button type="submit" className="button">Submit</button>
           </div>
         </form>
