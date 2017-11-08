@@ -5,7 +5,6 @@ import InputFormGroup from './InputFormGroup';
 class CategoryForm extends Component {
   constructor(props) {
     super();
-    console.log(props);
     this.state = {
       name: '',
       icon: '',

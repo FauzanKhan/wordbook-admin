@@ -64,7 +64,7 @@ class Words extends Component {
     this.setState({
       currentAudioSource: currentAudioId === _id ? null : audioSrc,
       currentAudioId: currentAudioId === _id ? null : _id,
-    },() => console.log(this.state))
+    });
   }
 
   clearCurrentAudio() {

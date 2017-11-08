@@ -3,22 +3,24 @@ import { Link } from 'react-router-dom';
 
 import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFromGroup';
+import FileFormGroup from './FileFormGroup';
 
 import { uploadFile, getSignedRequest } from '../services/s3';
 class WordForm extends Component {
   constructor(props) {
     super();
     this.state = {
-      name: '',
-      definition: '',
-      synonyms: '',
-      imageUrl: '',
-      audioFileName: '',
-      categoryId: '',
-      ...props.selectedWord,
+      formData: {
+        name: '',
+        definition: '',
+        synonyms: '',
+        imageUrl: '',
+        audioFileName: '',
+        categoryId: '',
+        ...props.selectedWord,
+      }
     };
 
-    this.handleFileChange = ::this.handleFileChange;
     this.handleSubmit = ::this.handleSubmit;
   }
 
@@ -27,33 +29,34 @@ class WordForm extends Component {
     !categories && getCategories();
   }
 
-  handleFileChange(value, files) {
-    const reader = new FileReader();
-    const file = files[0];
-
-    reader.onload = () => {
-      getSignedRequest(file)
-        .then(({ signedRequest, url }) => uploadFile({ file, signedRequest, url }))
-        .then(url => this.setState({ audioSrc: url }))
-    };
-
-    reader.readAsDataURL(file);
-  }
-
   handleSubmit(e) {
     e.preventDefault();
-    this.props.onSubmit(this.state);
+    const { file, signedRequest, url } = this.audioInput;
+    if (file) {
+      uploadFile({ file, signedRequest, url })
+        .then(audioSrc => this.props.onSubmit({ ...this.state.formData, audioSrc }));
+      this.setState({ isFileUploading: true });
+    }
+    else {
+      this.props.onSubmit({ ...this.state.formData })
+    }
   }
 
   updateStateValue(key, value) {
     this.setState({
-      [key]: value
+      formData: {
+        ...this.state.formData,
+        [key]: value
+      },
     });
   }
 
   render() {
     const { selectedWord, categories, heading } = this.props;
-    const { name, categoryId, definition, synonyms, imageUrl } = this.state;
+    const {
+      formData: { name, categoryId, definition, synonyms, imageUrl },
+      isFileUploading,
+    } = this.state;
 
     return (
       <div>
@@ -100,13 +103,14 @@ class WordForm extends Component {
               onChange={(value) => this.updateStateValue('imageUrl', value)}
             />
             {
-              <div className="column column-50">
-                <label>Audio</label>
-                <input type="file" onChange={({ target: { value, files }}) => this.handleFileChange( value, files)} />
-              </div>
+              <FileFormGroup
+                ref={(audioInput) => this.audioInput = audioInput}
+                className="column column-50"
+                label="Audio"
+              />
             }
           </div>
-
+            { isFileUploading && <h5>Uploading File. Please wait...</h5> }
           <div className="float-right">
             <Link to="/words" className="button button-clear">Cancel</Link>
             <button type="submit" className="button">Submit</button>
