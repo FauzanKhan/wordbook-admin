@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFromGroup';
+
+import { uploadFile, getSignedRequest } from '../services/s3';
 class WordForm extends Component {
   constructor(props) {
     super();
@@ -28,11 +31,10 @@ class WordForm extends Component {
     const reader = new FileReader();
     const file = files[0];
 
-    reader.onload = (upload) => {
-      this.setState({
-        audio: upload.target.result,
-        audioFileName: file.name,
-      }, () => console.log(this.state));
+    reader.onload = () => {
+      getSignedRequest(file)
+        .then(({ signedRequest, url }) => uploadFile({ file, signedRequest, url }))
+        .then(url => this.setState({ audioSrc: url }))
     };
 
     reader.readAsDataURL(file);

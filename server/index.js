@@ -1,12 +1,15 @@
 const bodyParser= require('body-parser');
-const { MongoClient, ObjectId } = require('mongodb');
-const express = require('express');
-const app = express();
 const path = require('path');
+const aws = require('aws-sdk');
+const express = require('express');
+const { MongoClient, ObjectId } = require('mongodb');
 
-const { DB_URL } = process.env;
+const app = express();
+const { DB_URL, S3_BUCKET } = process.env;
 const clientDir = `${__dirname}/../client/dist`;
 let db;
+
+aws.config.region = 'eu-central-1';
 
 console.log(`Connecting to ${DB_URL}`);
 MongoClient.connect(DB_URL, (err, database) => {
@@ -72,6 +75,7 @@ app.get('/api/words', (req, res) => {
 app.post('/api/words', (req, res) => {
   const words = Object.assign({}, req.body);
   words.categoryId = new ObjectId(req.body.categoryId);
+  console.log(words);
   db.collection('words').save(words, (err, result) => {
     console.log('record added');
     res.status(202).send();
@@ -80,9 +84,9 @@ app.post('/api/words', (req, res) => {
 
 app.put('/api/words/:_id', (req, res) => {
   req.body.categoryId = new ObjectId(req.body.categoryId);
-  const { name, definition, synonyms, imageUrl, audio, audioFileName, categoryId } = req.body;
+  const { name, definition, synonyms, imageUrl, audioSrc, audioFileName, categoryId } = req.body;
   const _id = new ObjectId(req.params._id);
-  db.collection('words').update({ _id }, { name, definition, synonyms, imageUrl, audio, audioFileName, categoryId }, (err, result) => {
+  db.collection('words').update({ _id }, { name, definition, synonyms, imageUrl, audioSrc, audioFileName, categoryId }, (err, result) => {
     console.log('record updated');
     res.status(202).send();
   });
@@ -94,6 +98,30 @@ app.delete('/api/words/:_id', (req, res) => {
     console.log('record deleted', err);
     res.status(202).send();
   })
+});
+
+app.get('/api/sign-s3', (req, res) => {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.status(500).send();
+    }
+    res.send({
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    });
+  });
 });
 
 
