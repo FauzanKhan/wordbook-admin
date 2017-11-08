@@ -59,10 +59,10 @@ class Words extends Component {
       .then(() => this.context.router.history.push('/words'));
   }
 
-  changeCurrentAudio(_id, audio) {
+  changeCurrentAudio(_id, audioSrc) {
     const { currentAudioId } = this.state;
     this.setState({
-      currentAudioSource: currentAudioId === _id ? null : audio,
+      currentAudioSource: currentAudioId === _id ? null : audioSrc,
       currentAudioId: currentAudioId === _id ? null : _id,
     },() => console.log(this.state))
   }
@@ -75,14 +75,15 @@ class Words extends Component {
   }
 
   getTableRow(word) {
-    const { _id, name, definition, synonyms, imageUrl, audioFileName, audio, category } = word;
+    const { _id, name, definition, synonyms, imageUrl, audioSrc, category } = word;
     const { match } = this.props;
     const categoryName = category[0] && category[0].name;
+    const [ audioFileName, ...rest ] = audioSrc ? audioSrc.split('/').reverse() : [];
 
     return (
       <tr key={_id}>
         <td>
-          <a role="button" style={{ cursor: 'pointer' }} onClick={() => this.changeCurrentAudio(_id, audio)}>&#9658;</a>
+          <a role="button" style={{ cursor: 'pointer' }} onClick={() => this.changeCurrentAudio(_id, audioSrc)}>&#9658;</a>
           <span>{audioFileName}</span>
         </td>
         <td>{name}</td>

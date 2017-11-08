@@ -75,7 +75,6 @@ app.get('/api/words', (req, res) => {
 app.post('/api/words', (req, res) => {
   const words = Object.assign({}, req.body);
   words.categoryId = new ObjectId(req.body.categoryId);
-  console.log(words);
   db.collection('words').save(words, (err, result) => {
     console.log('record added');
     res.status(202).send();
