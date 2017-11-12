@@ -27,10 +27,17 @@ app.listen(PORT, () => {
 
 /* Categories Resource */
 app.get('/api/categories', (req, res) => {
-  db.collection('categories').find().toArray(function(err, categories) {
+  db.collection('categories').find().toArray((err, categories) => {
     res.send(categories);
   });
 });
+
+app.get('/api/categories/:_id/words', (req, res) => {
+  const categoryId = new ObjectId(req.params._id);
+  db.collection('words').find({ categoryId }).toArray((err, words) => {
+    res.send(words);
+  });
+})
 
 app.post('/api/categories', (req, res) => {
   db.collection('categories').save(req.body, (err, result) => {

@@ -15,7 +15,6 @@ class WordForm extends Component {
         definition: '',
         synonyms: '',
         imageUrl: '',
-        audioFileName: '',
         categoryId: '',
         ...props.selectedWord,
       }
