@@ -6,6 +6,7 @@ import SelectFormGroup from './SelectFromGroup';
 import FileFormGroup from './FileFormGroup';
 
 import { uploadFile, getSignedRequest } from '../services/s3';
+
 class WordForm extends Component {
   constructor(props) {
     super();
@@ -17,7 +18,7 @@ class WordForm extends Component {
         imageUrl: '',
         categoryId: '',
         ...props.selectedWord,
-      }
+      },
     };
 
     this.handleSubmit = ::this.handleSubmit;
@@ -35,9 +36,8 @@ class WordForm extends Component {
       uploadFile({ file, signedRequest, url })
         .then(audioSrc => this.props.onSubmit({ ...this.state.formData, audioSrc }));
       this.setState({ isFileUploading: true });
-    }
-    else {
-      this.props.onSubmit({ ...this.state.formData })
+    } else {
+      this.props.onSubmit({ ...this.state.formData });
     }
   }
 
@@ -45,7 +45,7 @@ class WordForm extends Component {
     this.setState({
       formData: {
         ...this.state.formData,
-        [key]: value
+        [key]: value,
       },
     });
   }
@@ -66,15 +66,15 @@ class WordForm extends Component {
               className="column column-50"
               label="Word"
               value={name}
-              onChange={(value) => this.updateStateValue('name', value)}
+              onChange={value => this.updateStateValue('name', value)}
             />
             { categories &&
-                <SelectFormGroup
+            <SelectFormGroup
                   className="column column-50"
                   label="Category"
                   value={categoryId}
                   options={categories}
-                  onChange={(value) => this.updateStateValue('categoryId', value)}
+                  onChange={value => this.updateStateValue('categoryId', value)}
                 />
             }
           </div>
@@ -84,13 +84,13 @@ class WordForm extends Component {
               className="column column-50"
               label="Definition"
               value={definition}
-              onChange={(value) => this.updateStateValue('definition', value)}
+              onChange={value => this.updateStateValue('definition', value)}
             />
             <InputFormGroup
               className="column column-50"
               label="Synonymns"
               value={synonyms}
-              onChange={(value) => this.updateStateValue('synonyms', value)}
+              onChange={value => this.updateStateValue('synonyms', value)}
             />
           </div>
 
@@ -99,24 +99,24 @@ class WordForm extends Component {
               className="column column-50"
               label="ImageUrl"
               value={imageUrl}
-              onChange={(value) => this.updateStateValue('imageUrl', value)}
+              onChange={value => this.updateStateValue('imageUrl', value)}
             />
             {
               <FileFormGroup
-                ref={(audioInput) => this.audioInput = audioInput}
+                ref={audioInput => this.audioInput = audioInput}
                 className="column column-50"
                 label="Audio"
               />
             }
           </div>
-            { isFileUploading && <h5>Uploading File. Please wait...</h5> }
+          { isFileUploading && <h5>Uploading File. Please wait...</h5> }
           <div className="float-right">
             <Link to="/words" className="button button-clear">Cancel</Link>
             <button type="submit" className="button">Submit</button>
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
 

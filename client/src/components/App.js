@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect, BrowserRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import Header from './Header';
 import WelcomeScreen from './WelcomeScreen';
@@ -23,7 +23,7 @@ class App extends Component {
 
   getWords() {
     return api.get('words')
-      .then(words => this.setState({words}));
+      .then(words => this.setState({ words }));
   }
 
   render() {
@@ -37,7 +37,7 @@ class App extends Component {
       />
     );
 
-    const WordList =  ({ match }) => (
+    const WordList = ({ match }) => (
       <Words
         words={words}
         categories={categories}
@@ -51,7 +51,7 @@ class App extends Component {
       <Router>
         <div className="container">
           <Header />
-          <br/>
+          <br />
           <Route exact path="/" component={WelcomeScreen} />
           <Route path="/categories" render={CategoryList} />
           <Route path="/words" render={WordList} />

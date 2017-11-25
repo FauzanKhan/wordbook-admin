@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import InputFormGroup from './InputFormGroup';
+
 class CategoryForm extends Component {
   constructor(props) {
     super();
@@ -9,7 +10,7 @@ class CategoryForm extends Component {
       name: '',
       icon: '',
       ...props.selectedCategory,
-    }
+    };
     this.handleSubmit = ::this.handleSubmit;
   }
 
@@ -20,7 +21,7 @@ class CategoryForm extends Component {
 
   updateStateValue(key, value) {
     this.setState({
-      [key]: value
+      [key]: value,
     });
   }
 
@@ -35,13 +36,13 @@ class CategoryForm extends Component {
           <InputFormGroup
             label="Name of the category"
             value={name}
-            onChange={(value) => this.updateStateValue('name', value)}
+            onChange={value => this.updateStateValue('name', value)}
           />
 
           <InputFormGroup
             label="Icon"
             value={icon}
-            onChange={(value) => this.updateStateValue('icon', value)}
+            onChange={value => this.updateStateValue('icon', value)}
           />
 
           <div className="float-right">
@@ -50,7 +51,7 @@ class CategoryForm extends Component {
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
 

@@ -17,24 +17,24 @@ class FileFormGroup extends Component {
     reader.onload = () => {
       getSignedRequest(file)
         .then(({ signedRequest, url }) => {
-          this.file = file,
-          this.signedRequest = signedRequest,
-          this.url = url
+          this.file = file;
+          this.signedRequest = signedRequest;
+          this.url = url;
         });
     };
 
     reader.readAsDataURL(file);
   }
 
-  render () {
+  render() {
     const { label, ...rest } = this.props;
     return (
       <div {...rest}>
         <label>{label}</label>
-        <input type="file" onChange={({ target: { value, files }}) => this.handleChange( value, files)} />
+        <input type="file" onChange={({ target: { value, files } }) => this.handleChange(value, files)} />
       </div>
     );
   }
-};
+}
 
 export default FileFormGroup;

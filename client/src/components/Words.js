@@ -11,7 +11,7 @@ import api from '../services/api';
 class Words extends Component {
   constructor() {
     super();
-    this.state = {}
+    this.state = {};
 
     this.create = ::this.create;
     this.update = ::this.update;
@@ -34,13 +34,13 @@ class Words extends Component {
 
   create(word) {
     api.post('words', { body: word })
-      .then(this.onSaveSuccess)
+      .then(this.onSaveSuccess);
   }
 
   update(word) {
     const { _id } = word;
     api.put(`words/${_id}`, { body: word })
-      .then(this.onSaveSuccess)
+      .then(this.onSaveSuccess);
   }
 
   delete({ _id }) {
@@ -78,7 +78,7 @@ class Words extends Component {
     const { _id, name, definition, synonyms, imageUrl, audioSrc, category } = word;
     const { match } = this.props;
     const categoryName = category[0] && category[0].name;
-    const [ audioFileName, ...rest ] = audioSrc ? audioSrc.split('/').reverse() : [];
+    const [audioFileName, ...rest] = audioSrc ? audioSrc.split('/').reverse() : [];
 
     return (
       <tr key={_id}>
@@ -90,12 +90,12 @@ class Words extends Component {
         <td>{categoryName}</td>
         <td>{definition}</td>
         <td>{synonyms}</td>
-        <td><img height="50px" width="50px" style={{objectFit: 'cover'}} src={imageUrl} /></td>
+        <td><img height="50px" width="50px" style={{ objectFit: 'cover' }} src={imageUrl} /></td>
         <td>
           <Link to={`${match.url}/edit/${_id}`}>Edit</Link>
         </td>
         <td>
-          <a style={{cursor: 'pointer'}} onClick={() => this.delete(word)}>Delete</a>
+          <a style={{ cursor: 'pointer' }} onClick={() => this.delete(word)}>Delete</a>
         </td>
       </tr>
     );
@@ -106,12 +106,13 @@ class Words extends Component {
 
     return (
       <Section resource="words">
-        { words &&
-            <Table
-              colHeadings={['Audio', 'Name', 'Category', 'Definition', 'Synonyms', 'Image', '', '']}
-              items={words}
-              renderRow={this.getTableRow}
-            />
+        {
+          words &&
+          <Table
+            colHeadings={['Audio', 'Name', 'Category', 'Definition', 'Synonyms', 'Image', '', '']}
+            items={words}
+            renderRow={this.getTableRow}
+          />
         }
       </Section>
     );
@@ -127,13 +128,13 @@ class Words extends Component {
         categories={categories}
         onSubmit={this.create}
       />
-    )
+    );
   }
 
   getEditForm({ match }) {
     const { wordId } = match.params;
     const { categories, words, getCategories } = this.props;
-    const selectedWord = words.find(({ _id }) => _id === wordId );
+    const selectedWord = words.find(({ _id }) => _id === wordId);
 
     return (
       <WordForm
@@ -143,7 +144,7 @@ class Words extends Component {
         selectedWord={selectedWord}
         onSubmit={this.update}
       />
-    )
+    );
   }
 
   render() {
@@ -163,6 +164,6 @@ class Words extends Component {
 
 Words.contextTypes = {
   router: PropTypes.object,
-}
+};
 
 export default Words;

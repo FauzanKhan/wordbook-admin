@@ -10,10 +10,9 @@ import api from '../services/api';
 
 class Categories extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {};
 
-    this.selectCategory = ::this.selectCategory;
     this.handleSave = ::this.handleSave;
     this.create = ::this.create;
     this.update = ::this.update;
@@ -29,12 +28,6 @@ class Categories extends Component {
     this.props.getCategories();
   }
 
-  selectCategory(category) {
-    this.setState({
-      selectedCategory: category,
-    });
-  }
-
   handleSave() {
     return this.props.getCategories()
       .then(() => this.context.router.history.push('/categories'));
@@ -42,12 +35,12 @@ class Categories extends Component {
 
   create(category) {
     api.post('categories', { body: category })
-      .then(this.handleSave)
+      .then(this.handleSave);
   }
 
   update({ _id, name, icon }) {
-    api.put(`categories/${_id}`, { body: { name, icon }})
-      .then(this.handleSave)
+    api.put(`categories/${_id}`, { body: { name, icon } })
+      .then(this.handleSave);
   }
 
   delete({ _id }) {
@@ -64,10 +57,10 @@ class Categories extends Component {
         <td>{name}</td>
         <td>{icon}</td>
         <td>
-          <Link to={`${match.url}/edit/${_id}`}>Edit</Link>
+          <Link to={`${match.url}/edit/${_id}`} className="button button-clear">Edit</Link>
         </td>
         <td>
-          <a style={{cursor: 'pointer'}} onClick={() => this.delete(category)}>Delete</a>
+          <button className="button-clear" onClick={() => this.delete(category)}>Delete</button>
         </td>
       </tr>
     );
@@ -78,12 +71,13 @@ class Categories extends Component {
 
     return (
       <Section resource="categories">
-        { categories &&
-            <Table
-              colHeadings={['Name', 'Icon', '', '']}
-              items={categories}
-              renderRow={this.getTableRow}
-            />
+        {
+          categories &&
+          <Table
+            colHeadings={['Name', 'Icon', '', '']}
+            items={categories}
+            renderRow={this.getTableRow}
+          />
         }
       </Section>
     );
@@ -92,12 +86,12 @@ class Categories extends Component {
   getCreateForm() {
     return (
       <CategoryForm heading="Add New Category" onSubmit={this.create} />
-    )
+    );
   }
 
   getEditForm({ match }) {
     const { categoryId } = match.params;
-    const selectedCategory = this.props.categories.find(({ _id }) => _id === categoryId );
+    const selectedCategory = this.props.categories.find(({ _id }) => _id === categoryId);
 
     return (
       <CategoryForm
@@ -105,11 +99,10 @@ class Categories extends Component {
         selectedCategory={selectedCategory}
         onSubmit={this.update}
       />
-    )
+    );
   }
 
   render() {
-    const { selectedCategory } = this.state;
     const { categories, match } = this.props;
 
     return (
@@ -124,6 +117,6 @@ class Categories extends Component {
 
 Categories.contextTypes = {
   router: PropTypes.object,
-}
+};
 
 export default Categories;
