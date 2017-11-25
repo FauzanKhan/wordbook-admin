@@ -150,7 +150,7 @@ class Words extends Component {
   }
 
   render() {
-    const { selectedWord, currentAudioSource } = this.state;
+    const { currentAudioSource } = this.state;
     const { words, match } = this.props;
 
     return (
