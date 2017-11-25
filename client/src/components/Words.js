@@ -90,7 +90,9 @@ class Words extends Component {
         <td>{categoryName}</td>
         <td>{definition}</td>
         <td>{synonyms}</td>
-        <td><img height="50px" width="50px" style={{ objectFit: 'cover' }} src={imageUrl} /></td>
+        <td>
+          <img height="50px" width="50px" style={{ objectFit: 'cover' }} src={imageUrl} alt={name} />
+        </td>
         <td>
           <Link className="button button-clear" to={`${match.url}/edit/${_id}`}>Edit</Link>
         </td>
