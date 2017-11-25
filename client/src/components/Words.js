@@ -83,7 +83,7 @@ class Words extends Component {
     return (
       <tr key={_id}>
         <td>
-          <a role="button" style={{ cursor: 'pointer' }} onClick={() => this.changeCurrentAudio(_id, audioSrc)}>&#9658;</a>
+          <button className="button-clear" onClick={() => this.changeCurrentAudio(_id, audioSrc)}>&#9658;</button>
           <span>{audioFileName}</span>
         </td>
         <td>{name}</td>
@@ -92,10 +92,10 @@ class Words extends Component {
         <td>{synonyms}</td>
         <td><img height="50px" width="50px" style={{ objectFit: 'cover' }} src={imageUrl} /></td>
         <td>
-          <Link to={`${match.url}/edit/${_id}`}>Edit</Link>
+          <Link className="button button-clear" to={`${match.url}/edit/${_id}`}>Edit</Link>
         </td>
         <td>
-          <a style={{ cursor: 'pointer' }} onClick={() => this.delete(word)}>Delete</a>
+          <button className="button-clear" onClick={() => this.delete(word)}>Delete</button>
         </td>
       </tr>
     );
