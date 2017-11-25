@@ -9,7 +9,7 @@ Admin panel for wordbook mobile app
 - [x] Make happy path work
 - [x] Configure env variables for deployment
 - [ ] Consider moving from inline CSS to CSS Next if *really* needed
-- [ ] Set up linting
+- [x] Set up linting
 - [ ] Form validation
 - [ ] Error handling
 - [ ] Add unit tests
