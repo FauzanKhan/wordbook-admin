@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import CategoryForm from './CategoryForm';
 
-describe.only('CategoryForm', () => {
+describe('CategoryForm', () => {
   const spy = jest.fn();
   const Component = shallow(<CategoryForm onSubmit={spy} />);
 
