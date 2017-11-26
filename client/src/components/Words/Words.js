@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Table from '../Table';
 import Section from '../Section';
 import WordForm from '../WordForm';
+import TableRow from './TableRow';
 
 import api from '../../services/api';
 
@@ -68,31 +69,15 @@ class Words extends Component {
   }
 
   getTableRow(word) {
-    const { _id, name, definition, synonyms, imageUrl, audioSrc, category } = word;
     const { match } = this.props;
-    const categoryName = category[0] && category[0].name;
-    const [audioFileName, ...rest] = audioSrc ? audioSrc.split('/').reverse() : [];
-
+    const editLink = `${match.url}/edit/${word._id}`;
     return (
-      <tr key={_id}>
-        <td>
-          <button className="button-clear" onClick={() => this.changeCurrentAudio(_id, audioSrc)}>&#9658;</button>
-          <span>{audioFileName}</span>
-        </td>
-        <td>{name}</td>
-        <td>{categoryName}</td>
-        <td>{definition}</td>
-        <td>{synonyms}</td>
-        <td>
-          <img height="50px" width="50px" style={{ objectFit: 'cover' }} src={imageUrl} alt={name} />
-        </td>
-        <td>
-          <Link className="button button-clear" to={`${match.url}/edit/${_id}`}>Edit</Link>
-        </td>
-        <td>
-          <button className="button-clear" onClick={() => this.delete(word)}>Delete</button>
-        </td>
-      </tr>
+      <TableRow
+        word={word}
+        editLink={editLink}
+        onChangeCurrentAudio={this.changeCurrentAudio}
+        onDelete={this.delete}
+      />
     );
   }
 
