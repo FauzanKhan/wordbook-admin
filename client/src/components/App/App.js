@@ -49,7 +49,7 @@ class App extends Component {
 
     return (
       <Router>
-        <div className="container">
+        <div className="container" data-e2e="app">
           <Header />
           <br />
           <Route exact path="/" component={WelcomeScreen} />
