@@ -119,4 +119,20 @@ Categories.contextTypes = {
   router: PropTypes.object,
 };
 
+Categories.propTypes = {
+  getCategories: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    url: PropTypes.string,
+  }).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    icon: PropTypes.string,
+  })),
+};
+
+Categories.defaultProps = {
+  categories: [],
+};
+
 export default Categories;

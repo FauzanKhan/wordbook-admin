@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const SelectFormGroup = ({ label, onChange, options, value, ...rest }) => (
   <div {...rest}>
@@ -16,5 +17,15 @@ const SelectFormGroup = ({ label, onChange, options, value, ...rest }) => (
     </select>
   </div>
 );
+
+SelectFormGroup.propTypes = {
+  label: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.name,
+  })),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 
 export default SelectFormGroup;

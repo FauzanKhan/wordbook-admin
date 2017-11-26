@@ -9,6 +9,7 @@ module.exports = {
         "react/sort-comp": 0,
         "object-curly-newline": 0,
         "jsx-a11y/media-has-caption": 0,
+        "react/require-default-props": 0,
     },
     "env": {
         "browser": true,

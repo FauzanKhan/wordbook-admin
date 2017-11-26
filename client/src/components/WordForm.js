@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import InputFormGroup from './InputFormGroup';
 import SelectFormGroup from './SelectFromGroup';
 import FileFormGroup from './FileFormGroup';
 
-import { uploadFile, getSignedRequest } from '../services/s3';
+import { uploadFile } from '../services/s3';
 
 class WordForm extends Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class WordForm extends Component {
   }
 
   render() {
-    const { selectedWord, categories, heading } = this.props;
+    const { categories, heading } = this.props;
     const {
       formData: { name, categoryId, definition, synonyms, imageUrl },
       isFileUploading,
@@ -68,8 +69,9 @@ class WordForm extends Component {
               value={name}
               onChange={value => this.updateStateValue('name', value)}
             />
-            { categories &&
-            <SelectFormGroup
+            {
+              categories &&
+                <SelectFormGroup
                   className="column column-50"
                   label="Category"
                   value={categoryId}
@@ -119,5 +121,23 @@ class WordForm extends Component {
     );
   }
 }
+
+WordForm.propTypes = {
+  selectedWord: PropTypes.shape({
+    name: PropTypes.string,
+    definition: PropTypes.string,
+    synonyms: PropTypes.string,
+    imageUrl: PropTypes.string,
+    categoryId: PropTypes.string,
+  }),
+  getCategories: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  categories: PropTypes.arrayOf(PropTypes.object),
+  heading: PropTypes.string,
+};
+
+WordForm.defaultProps = {
+  heading: 'Word Form',
+};
 
 export default WordForm;

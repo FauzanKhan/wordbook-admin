@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import InputFormGroup from './InputFormGroup';
@@ -26,7 +27,7 @@ class CategoryForm extends Component {
   }
 
   render() {
-    const { heading, selectedCategory } = this.props;
+    const { heading } = this.props;
     const { name, icon } = this.state;
 
     return (
@@ -54,5 +55,20 @@ class CategoryForm extends Component {
     );
   }
 }
+
+CategoryForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  selectedCategory: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    icon: PropTypes.string,
+  }),
+  heading: PropTypes.string,
+};
+
+CategoryForm.defaultProps = {
+  selectedCategory: undefined,
+  heading: 'Category Form',
+};
 
 export default CategoryForm;

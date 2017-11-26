@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Table = ({ colHeadings, items, renderRow }) => (
   <table>
@@ -10,5 +11,11 @@ const Table = ({ colHeadings, items, renderRow }) => (
     </tbody>
   </table>
 );
+
+Table.propTypes = {
+  colHeadings: PropTypes.arrayOf(PropTypes.string),
+  items: PropTypes.array,
+  renderRow: PropTypes.func.isRequired,
+};
 
 export default Table;

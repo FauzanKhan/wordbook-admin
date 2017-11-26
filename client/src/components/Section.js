@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const Section = ({ resource, children }) => (
@@ -10,5 +11,10 @@ const Section = ({ resource, children }) => (
     {children}
   </section>
 );
+
+Section.propTypes = {
+  resource: PropTypes.string.isRequired,
+  children: PropTypes.node,
+};
 
 export default Section;

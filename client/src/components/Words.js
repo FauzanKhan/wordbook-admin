@@ -16,7 +16,6 @@ class Words extends Component {
     this.create = ::this.create;
     this.update = ::this.update;
     this.delete = ::this.delete;
-    this.selectWord = ::this.selectWord;
     this.onSaveSuccess = ::this.onSaveSuccess;
     this.changeCurrentAudio = ::this.changeCurrentAudio;
     this.clearCurrentAudio = ::this.clearCurrentAudio;
@@ -46,12 +45,6 @@ class Words extends Component {
   delete({ _id }) {
     api.delete(`words/${_id}`)
       .then(this.props.getWords);
-  }
-
-  selectWord(word) {
-    this.setState({
-      selectedWord: word,
-    });
   }
 
   onSaveSuccess() {
@@ -166,6 +159,26 @@ class Words extends Component {
 
 Words.contextTypes = {
   router: PropTypes.object,
+};
+
+Words.propTypes = {
+  getCategories: PropTypes.func.isRequired,
+  getWords: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    url: PropTypes.string,
+  }).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    icon: PropTypes.string,
+  })),
+  words: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    definition: PropTypes.string,
+    synonyms: PropTypes.string,
+    imageUrl: PropTypes.string,
+    categoryId: PropTypes.string,
+  })),
 };
 
 export default Words;
