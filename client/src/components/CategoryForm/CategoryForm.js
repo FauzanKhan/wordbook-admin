@@ -35,12 +35,14 @@ class CategoryForm extends Component {
         <h4>{heading}</h4>
         <form onSubmit={this.handleSubmit}>
           <InputFormGroup
+            data-e2e="name"
             label="Name of the category"
             value={name}
             onChange={value => this.updateStateValue('name', value)}
           />
 
           <InputFormGroup
+            data-e2e="icon"
             label="Icon"
             value={icon}
             onChange={value => this.updateStateValue('icon', value)}
