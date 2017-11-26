@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import InputFormGroup from './InputFormGroup';
-import SelectFormGroup from './SelectFromGroup';
-import FileFormGroup from './FileFormGroup';
+import InputFormGroup from '../InputFormGroup';
+import SelectFormGroup from '../SelectFormGroup';
+import FileFormGroup from '../FileFormGroup';
 
-import { uploadFile } from '../services/s3';
+import { uploadFile } from '../../services/s3';
 
 class WordForm extends Component {
   constructor(props) {

@@ -1,8 +1,5 @@
-const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const clientDir = `${__dirname}/client`;
 
 module.exports = {
   entry: `${__dirname}/src/index.js`,
@@ -20,10 +17,10 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['es2017', 'react', 'stage-0'],
-          }
-        }
-      }
-    ]
+          },
+        },
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -33,6 +30,6 @@ module.exports = {
     }),
     new webpack.SourceMapDevToolPlugin({
       filename: 'app.bundle.js.map',
-    })
-  ]
-}
+    }),
+  ],
+};

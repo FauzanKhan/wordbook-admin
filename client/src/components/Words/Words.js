@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Table from './Table';
-import Section from './Section';
-import WordForm from './WordForm';
+import Table from '../Table';
+import Section from '../Section';
+import WordForm from '../WordForm';
 
-import api from '../services/api';
+import api from '../../services/api';
 
 class Words extends Component {
   constructor() {

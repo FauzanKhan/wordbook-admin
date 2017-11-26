@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Table from './Table';
-import Section from './Section';
-import CategoryForm from './CategoryForm';
+import Table from '../Table';
+import Section from '../Section';
+import CategoryForm from '../CategoryForm';
 
-import api from '../services/api';
+import api from '../../services/api';
 
 class Categories extends Component {
   constructor(props) {

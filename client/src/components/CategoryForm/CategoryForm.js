@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import InputFormGroup from './InputFormGroup';
+import InputFormGroup from '../InputFormGroup';
 
 class CategoryForm extends Component {
   constructor(props) {

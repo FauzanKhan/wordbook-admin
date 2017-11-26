@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { getSignedRequest } from '../services/s3';
+import { getSignedRequest } from '../../services/s3';
 
 class FileFormGroup extends Component {
   constructor() {
