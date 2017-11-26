@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default () => (
+const Header = () => (
   <header>
     <nav className="clearfix">
       <div className="float-left"><Link to="/" style={{ color: '#606c76' }}><h3>Voca<b>Book</b></h3></Link></div>
@@ -12,3 +12,5 @@ export default () => (
     </nav>
   </header>
 );
+
+export default Header;

@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --config=jest.config.json",
+    "test:watch": "jest --config=jest.config.json --watch",
     "build": "webpack --config client/webpack.config.js",
-    "build:dev": "webpack --config client/webpack.config.js -w",
+    "build:watch": "webpack --config client/webpack.config.js -w",
     "start": "npm run build && node server/index.js",
-    "start:dev": "nodemon server/index.js"
+    "start:watch": "nodemon server/index.js"
   },
   "engines": {
     "node": "8.9.0"
