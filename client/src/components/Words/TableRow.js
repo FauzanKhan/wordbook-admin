@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const TableRow = ({ word, onChangeCurrentAudio, onDelete, editLink }) => {
@@ -27,6 +28,19 @@ const TableRow = ({ word, onChangeCurrentAudio, onDelete, editLink }) => {
       </td>
     </tr>
   );
+};
+
+TableRow.propTypes = {
+  onChangeCurrentAudio: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  editLink: PropTypes.string.isRequired,
+  word: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    definition: PropTypes.string,
+    synonyms: PropTypes.string,
+    imageUrl: PropTypes.string,
+  }),
 };
 
 export default TableRow;
